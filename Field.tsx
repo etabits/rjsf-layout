@@ -18,10 +18,13 @@ const Field: React.FC<FieldProps> = ({ name, children }) => {
     throw new Error(`RJSFLayout: No such field: "${name}"`);
   }
 
+  const { theme } = useContext(LayoutContext);
+
   return (
     <LayoutContext.Provider
       value={{
         layout: children,
+        theme,
       }}
     >
       {Field}

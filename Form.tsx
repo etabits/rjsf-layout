@@ -1,20 +1,23 @@
 import { ReactNode } from "react";
-import RJSFForm, { FormProps } from "@rjsf/core";
+import DefaultForm, { FormProps, ThemeProps, withTheme } from "@rjsf/core";
 
 import type { FieldChildren } from "./types";
 import LayoutContext from "./contexts/Layout";
 import FieldTemplate from "./templates/Field";
 import ObjectFieldTemplate from "./templates/ObjectField";
 
-const Form: React.FC<
-  {
-    children?: FieldChildren;
-    submitter?: ReactNode;
-  } & FormProps
-> = ({ children, submitter, ...props }) => {
+type LayoutFormProps = {
+  children?: FieldChildren;
+  submitter?: ReactNode;
+  theme?: ThemeProps;
+} & FormProps;
+
+const Form = ({ children, submitter, theme, ...props }: LayoutFormProps) => {
   const newProps = {
     ...props,
   } satisfies FormProps;
+
+  const RJSFForm = theme ? withTheme(theme) : DefaultForm;
 
   if (!children) {
     return <RJSFForm {...newProps}>{submitter}</RJSFForm>;
@@ -24,12 +27,14 @@ const Form: React.FC<
     <LayoutContext.Provider
       value={{
         layout: children,
+        theme,
       }}
     >
       <RJSFForm
         {...{
           ...newProps,
           templates: {
+            ...theme?.templates,
             FieldTemplate,
             ObjectFieldTemplate,
             ...newProps.templates,
