@@ -10,12 +10,15 @@ type FieldProps = {
 };
 
 const Field: React.FC<FieldProps> = ({ name, children }) => {
-  const Field = useContext(FieldsContext)?.find(
-    (props) => props.name === name
-  )?.content;
+  const fields = useContext(FieldsContext);
+  const Field = fields?.find((props) => props.name === name)?.content;
 
   if (!Field) {
-    throw new Error(`RJSFLayout: No such field: "${name}"`);
+    throw new Error(
+      `RJSFLayout: No such field: "${name}". Available fields: ${fields
+        ?.map((f) => f.name)
+        .join(", ")}`
+    );
   }
 
   const { theme } = useContext(LayoutContext);
