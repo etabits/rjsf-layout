@@ -1,16 +1,9 @@
-import { ReactNode } from "react";
-import DefaultForm, { FormProps, ThemeProps, withTheme } from "@rjsf/core";
+import DefaultForm, { FormProps, withTheme } from "@rjsf/core";
 
-import type { FieldChildren } from "./types";
+import type { LayoutFormProps } from "./types";
 import LayoutContext from "./contexts/Layout";
 import FieldTemplate from "./templates/Field";
 import ObjectFieldTemplate from "./templates/ObjectField";
-
-type LayoutFormProps = {
-  children?: FieldChildren;
-  submitter?: ReactNode;
-  theme?: ThemeProps;
-} & FormProps;
 
 const Form = ({ children, submitter, theme, ...props }: LayoutFormProps) => {
   const newProps = {
