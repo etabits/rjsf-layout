@@ -1,13 +1,8 @@
 import { useContext } from "react";
 
-import type { FieldChildren } from "./types";
+import type { FieldProps } from "./types";
 import FieldsContext from "./contexts/Fields";
 import LayoutContext from "./contexts/Layout";
-
-type FieldProps = {
-  name: string;
-  children?: FieldChildren;
-};
 
 const Field: React.FC<FieldProps> = ({ name, children }) => {
   const fields = useContext(FieldsContext);

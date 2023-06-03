@@ -4,8 +4,14 @@ import type { LayoutFormProps } from "./types";
 import LayoutContext from "./contexts/Layout";
 import FieldTemplate from "./templates/Field";
 import ObjectFieldTemplate from "./templates/ObjectField";
+import type { JSONSchema7 } from "json-schema";
 
-const Form = ({ children, submitter, theme, ...props }: LayoutFormProps) => {
+const Form = <T extends JSONSchema7>({
+  children,
+  submitter,
+  theme,
+  ...props
+}: LayoutFormProps<T>) => {
   const newProps = {
     ...props,
   } satisfies FormProps;
