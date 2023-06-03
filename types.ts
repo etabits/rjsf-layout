@@ -12,11 +12,20 @@ export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
 
 export type SmartFieldChildren<T extends JSONSchema7> =
   | BasicReactNode
-  | ((helpers: {
-      Field: React.FC<
-        FieldProps<NonNullable<keyof NonNullable<T>["properties"]>>
-      >;
-    }) => BasicReactNode);
+  | ((helpers: { Field: TypedField<T> }) => BasicReactNode);
+
+export type TypedField<SCH extends JSONSchema7> = <
+  FN extends keyof SCH["properties"]
+>({
+  name,
+}: {
+  name: FN;
+  children?: SmartFieldChildren<
+    SCH["properties"][FN] extends { items: any }
+      ? SCH["properties"][FN]["items"]
+      : never
+  >;
+}) => React.JSX.Element;
 
 export type LayoutFormProps<T extends JSONSchema7> = Omit<
   FormProps,
@@ -26,9 +35,4 @@ export type LayoutFormProps<T extends JSONSchema7> = Omit<
   children?: SmartFieldChildren<T>;
   submitter?: ReactNode;
   theme?: ThemeProps;
-};
-
-export type FieldProps<FN = string> = {
-  name: FN;
-  children?: FieldChildren;
 };

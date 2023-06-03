@@ -1,10 +1,10 @@
 import { useContext } from "react";
 
-import type { FieldProps } from "./types";
+import type { TypedField } from "./types";
 import FieldsContext from "./contexts/Fields";
 import LayoutContext from "./contexts/Layout";
 
-const Field: React.FC<FieldProps> = ({ name, children }) => {
+const Field: TypedField<{}> = ({ name, children }) => {
   const fields = useContext(FieldsContext);
   const Field = fields?.find((props) => props.name === name)?.content;
 
