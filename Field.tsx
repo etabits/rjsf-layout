@@ -16,13 +16,13 @@ const Field: TypedField<{}> = ({ name, children }) => {
     );
   }
 
-  const { theme } = useContext(LayoutContext);
+  const inheritedLayoutProps = useContext(LayoutContext);
 
   return (
     <LayoutContext.Provider
       value={{
+        ...inheritedLayoutProps,
         layout: children,
-        theme,
       }}
     >
       {Field}
