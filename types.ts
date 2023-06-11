@@ -17,6 +17,7 @@ export type SmartFieldChildren<T extends JSONSchema7> =
 export type TypedField<SCH extends JSONSchema7> = <
   FN extends keyof SCH["properties"]
 >(props: {
+  label?: string;
   name: FN;
   children?: SmartFieldChildren<
     SCH["properties"][FN] extends { items: any }

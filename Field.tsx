@@ -4,7 +4,7 @@ import type { TypedField } from "./types";
 import FieldsContext from "./contexts/Fields";
 import LayoutContext from "./contexts/Layout";
 
-const Field: TypedField<{}> = ({ name, children }) => {
+const Field: TypedField<{}> = ({ name, children, label }) => {
   const fields = useContext(FieldsContext);
   const Field = fields?.find((props) => props.name === name)?.content;
 
@@ -23,6 +23,9 @@ const Field: TypedField<{}> = ({ name, children }) => {
       value={{
         ...inheritedLayoutProps,
         layout: children,
+        overrides: {
+          label,
+        },
       }}
     >
       {Field}

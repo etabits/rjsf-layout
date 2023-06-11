@@ -9,6 +9,9 @@ const LayoutContext = createContext<{
   layout?: SmartFieldChildren<JSONSchema7>;
   theme?: ThemeProps;
   uiSchema?: UiSchema;
+  overrides?: {
+    label?: string;
+  };
 }>({});
 
 export default LayoutContext;
