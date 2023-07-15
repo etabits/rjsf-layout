@@ -17,6 +17,7 @@ const ArrayFieldTemplate: TemplatesType["ArrayFieldTemplate"] = (props) => {
     typeof layout === "function"
       ? layout({
           Field,
+          formData: props.formData,
         })
       : layout;
 

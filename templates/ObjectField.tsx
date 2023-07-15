@@ -20,6 +20,7 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
     typeof layout === "function"
       ? layout({
           Field,
+          formData: props.formData,
         })
       : layout;
 

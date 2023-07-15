@@ -12,7 +12,11 @@ export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
 
 export type SmartFieldChildren<T extends JSONSchema7> =
   | BasicReactNode
-  | ((helpers: { Field: TypedField<T> }) => BasicReactNode);
+  | ((helpers: {
+      Field: TypedField<T>;
+      // CHKME can we type this formData thing below?
+      formData: any;
+    }) => BasicReactNode);
 
 export type TypedField<SCH extends JSONSchema7> = <
   FN extends keyof SCH["properties"]
