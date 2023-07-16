@@ -38,6 +38,11 @@ const Form = <T extends JSONSchema7>({
             ObjectFieldTemplate,
             ...newProps.templates,
           },
+          // CHKME should we do this merge? or is it redundant?
+          widgets: {
+            ...theme?.widgets,
+            ...newProps.widgets,
+          },
         }}
       >
         {submitter}
