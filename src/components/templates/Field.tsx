@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { getDefaultRegistry } from "@rjsf/core";
 import { TemplatesType } from "@rjsf/utils";
 
-import PropsContext from "../contexts/Props";
-import LayoutContext from "../contexts/Layout";
+import PropsContext from "../../contexts/Props";
+import LayoutContext from "../../contexts/Layout";
 
 const DefaultFieldTemplate = getDefaultRegistry().templates["FieldTemplate"];
 
@@ -13,7 +13,7 @@ const FieldTemplate: TemplatesType["FieldTemplate"] = (props) => {
     theme?.templates?.["FieldTemplate"] || DefaultFieldTemplate;
 
   const { label } = overrides || {};
-  if (label) {
+  if (typeof label !== "undefined") {
     // FIXME this should be done without mutating things directly,
     // but overriding props.schema does not work!
     props.schema.title = label;

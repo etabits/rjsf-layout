@@ -2,27 +2,38 @@
   "name": "rjsf-layout",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "module": "./lib/index.js",
+  "main": "./dist/index.js",
+  "types": "./lib/index.d.ts",
+  "files": [
+    "/lib",
+    "/dist"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tsc": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "prepublishOnly": "tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "rjsf",
+    "react-jsonschema-form",
+    "layout"
+  ],
   "author": "Hasan Arous <arous.hasan@gmail.com> (https://www.aularon.com/)",
   "peerDependencies": {
-    "@rjsf/core": "^5.6.2",
-    "@rjsf/utils": "^5.6.2",
-    "@rjsf/validator-ajv8": "^5.6.2",
+    "@rjsf/core": "^5.13.0",
+    "@rjsf/utils": "^5.13.0",
+    "@rjsf/validator-ajv8": "^5.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@rjsf/core": "^5.6.2",
-    "@rjsf/utils": "^5.6.2",
-    "@rjsf/validator-ajv8": "^5.6.2",
+    "@rjsf/core": "^5.13.0",
+    "@rjsf/utils": "^5.13.0",
+    "@rjsf/validator-ajv8": "^5.13.0",
     "@types/json-schema": "^7.0.12",
     "@types/react": "^18.0.28",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "typescript": "^5.0.2"
+    "typescript": "^5.2.2"
   }
 }

@@ -1,8 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "target": "es2015",
+    "declaration": true,
+    "outDir": "./lib",
+    "lib": ["dom", "dom.iterable", "ES2019"],
+    "module": "ES2020",
+    "target": "ES2019",
 
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -10,10 +12,10 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "moduleResolution": "node",
-    "noEmit": true,
     "noFallthroughCasesInSwitch": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true
-  }
+  },
+  "include": ["src/**/*.ts"] // should we add *.tsx?
 }

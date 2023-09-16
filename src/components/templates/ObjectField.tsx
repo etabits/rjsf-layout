@@ -2,9 +2,9 @@ import { useContext } from "react";
 import { TemplatesType } from "@rjsf/utils";
 import { getDefaultRegistry } from "@rjsf/core";
 
-import LayoutContext from "../contexts/Layout";
-import FieldsContext from "../contexts/Fields";
-import DisplayLayout from "../utils/DisplayLayout";
+import LayoutContext from "../../contexts/Layout";
+import FieldsContext from "../../contexts/Fields";
+import DisplayLayout from "../../utils/DisplayLayout";
 import Field from "../Field";
 
 const DefaultObjectFieldTemplate =

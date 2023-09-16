@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import type { JSONSchema7 } from "json-schema";
 
 type BasicReactNode =
-  | React.JSX.Element
+  | React.ReactElement
   | string
-  | (React.JSX.Element | string)[];
+  | (React.ReactElement | string)[];
 
 export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
 
@@ -28,7 +28,7 @@ export type TypedField<SCH extends JSONSchema7> = <
       ? SCH["properties"][FN]["items"]
       : never
   >;
-}) => React.JSX.Element;
+}) => React.ReactElement;
 
 export type LayoutFormProps<T extends JSONSchema7> = Omit<
   FormProps,
