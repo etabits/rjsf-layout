@@ -21,6 +21,7 @@ const Form = <T extends JSONSchema7>({
   return (
     <LayoutContext.Provider
       value={{
+        // @ts-ignore FIXME
         layout: children,
         theme,
       }}

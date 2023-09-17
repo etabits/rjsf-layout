@@ -2,6 +2,9 @@ import type { FormProps, ThemeProps } from "@rjsf/core";
 import type { TemplatesType } from "@rjsf/utils";
 import type { ReactNode } from "react";
 import type { JSONSchema7 } from "json-schema";
+// CHKME use FromSchema from json-schema-to-ts instead?
+// CHKME can we export the type at compile-time instead of depending on ajv?
+import type { JTDDataType } from "ajv/dist/jtd";
 
 type BasicReactNode =
   | React.ReactElement
@@ -14,8 +17,7 @@ export type SmartFieldChildren<T extends JSONSchema7> =
   | BasicReactNode
   | ((helpers: {
       Field: TypedField<T>;
-      // CHKME can we type this formData thing below?
-      formData: any;
+      formData: JTDDataType<T>;
     }) => BasicReactNode);
 
 export type TypedField<SCH extends JSONSchema7> = <
@@ -30,12 +32,21 @@ export type TypedField<SCH extends JSONSchema7> = <
   >;
 }) => React.ReactElement;
 
+type OnAction<T extends JSONSchema7, C extends "onSubmit" | "onChange"> = (
+  data: Omit<Parameters<NonNullable<FormProps[C]>>[0], "formData"> & {
+    formData?: JTDDataType<T>;
+  },
+  etc: Parameters<NonNullable<FormProps[C]>>[1]
+) => void;
+
 export type LayoutFormProps<T extends JSONSchema7> = Omit<
   FormProps,
-  "children"
+  "children" | "onSubmit" | "onChange"
 > & {
   schema: T;
   children?: SmartFieldChildren<T>;
   submitter?: ReactNode;
   theme?: ThemeProps;
+  onSubmit?: OnAction<T, "onSubmit">;
+  onChange?: OnAction<T, "onChange">;
 };

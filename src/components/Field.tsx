@@ -22,6 +22,7 @@ const Field: TypedField<{}> = ({ name, children, label }) => {
     <LayoutContext.Provider
       value={{
         ...inheritedLayoutProps,
+        // @ts-ignore FIXME
         layout: children,
         overrides: {
           label,
