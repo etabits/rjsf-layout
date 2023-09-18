@@ -1,44 +1,44 @@
-import DefaultForm, { withTheme } from "@rjsf/core";
+import DefaultForm, { type FormProps, withTheme } from "@rjsf/core";
 
-import type { LayoutFormProps } from "../types";
+import type { JSONSchemaObject, LayoutFormProps } from "../types";
 import LayoutContext from "../contexts/Layout";
 import FieldTemplate from "./templates/Field";
 import ObjectFieldTemplate from "./templates/ObjectField";
-import type { JSONSchema7 } from "json-schema";
 
-const Form = <T extends JSONSchema7>({
+const Form = <T extends JSONSchemaObject>({
   children,
   submitter,
   theme,
   ...props
 }: LayoutFormProps<T>) => {
+  const rjsfProps = props as FormProps;
   const RJSFForm = theme ? withTheme(theme) : DefaultForm;
 
   if (!children) {
-    return <RJSFForm {...props}>{submitter}</RJSFForm>;
+    return <RJSFForm {...rjsfProps}>{submitter}</RJSFForm>;
   }
 
   return (
     <LayoutContext.Provider
       value={{
-        // @ts-ignore FIXME
         layout: children,
         theme,
       }}
     >
       <RJSFForm
         {...{
-          ...props,
+          ...rjsfProps,
+
           templates: {
             ...theme?.templates,
             FieldTemplate,
             ObjectFieldTemplate,
-            ...props.templates,
+            ...rjsfProps.templates,
           },
           // CHKME should we do this merge? or is it redundant?
           widgets: {
             ...theme?.widgets,
-            ...props.widgets,
+            ...rjsfProps.widgets,
           },
         }}
       >
