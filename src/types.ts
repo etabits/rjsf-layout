@@ -1,5 +1,8 @@
 import type { FormProps, ThemeProps } from "@rjsf/core";
-import type { TemplatesType } from "@rjsf/utils";
+import type {
+  ObjectFieldTemplateProps,
+  TemplatesType,
+} from "@rjsf/utils";
 import type { ReactNode } from "react";
 import type { FromSchema as FromSchema_, JSONSchema } from "json-schema-to-ts";
 
@@ -25,7 +28,14 @@ export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
 export type SmartFieldChildren<
   S extends JSONSchemaObject,
   D extends BasicDataObject
-> = BasicReactNode | React.FC<{ Field: TypedField<S, D>; formData: D }>;
+> =
+  | BasicReactNode
+  | React.FC<
+      { Field: TypedField<S, D> } & ObjectFieldTemplateProps<D> & {
+          // Because array item data becomes undefined-able otherwise
+          formData: Partial<D>;
+        }
+    >;
 
 type TypedFieldProps<
   S extends JSONSchemaObject,

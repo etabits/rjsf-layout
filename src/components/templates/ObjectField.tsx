@@ -19,8 +19,8 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
   const expandedLayout =
     typeof layout === "function"
       ? layout({
+          ...props,
           Field,
-          formData: props.formData,
         })
       : layout;
 
