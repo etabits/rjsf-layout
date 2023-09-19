@@ -1,5 +1,6 @@
 import type { FormProps, ThemeProps } from "@rjsf/core";
 import type {
+  FieldProps,
   ObjectFieldTemplateProps,
   TemplatesType,
 } from "@rjsf/utils";
@@ -23,6 +24,8 @@ export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
   S  Schema
   D  Data
   FN Field Name
+  I  Item
+  IS ItemsSchema
 */
 
 export type SmartFieldChildren<
@@ -44,20 +47,22 @@ type TypedFieldProps<
 > = {
   label?: string;
   name: FN;
-  children?: SmartFieldChildren<
-    S["properties"][FN] extends {
-      items: infer U;
-    }
-      ? U extends JSONSchemaObject
-        ? U
-        : never
-      : never,
-    D extends Record<any, any>
-      ? NonNullable<D[FN]> extends Array<infer Item>
-        ? Item
-        : never
-      : never
-  >;
+  children?: D extends Record<any, any> // We should have nested data here!
+    ? S["properties"][FN] extends {
+        items: infer IS;
+      }
+      ? SmartFieldChildren<
+          IS extends JSONSchemaObject ? IS : never,
+          NonNullable<D[FN]> extends Array<infer I> ? I : D[FN]
+        >
+      : React.FC<
+          S["properties"][FN] extends { type: "object" }
+            ? {
+                Field: TypedField<S["properties"][FN], D[FN]>;
+              } & ObjectFieldTemplateProps<D[FN]>
+            : FieldProps<D[FN]>
+        >
+    : never;
 };
 
 export type TypedField<
