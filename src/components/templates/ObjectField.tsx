@@ -44,6 +44,7 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
             ])
           ),
           ...namedFields,
+          Field,
         })
       : layout;
 

@@ -60,7 +60,7 @@ type ExpandedDataProps<
 type NamedDataProps<
   Props extends { formData?: unknown; onChange?: unknown },
   FN extends string
-> = Omit<Props, "formData" | "onChange"> & {
+> = Props & {
   [FN_ in `$${FN}`]: Props["formData"];
 } & (Props["onChange"] extends Function
     ? {
@@ -85,7 +85,7 @@ type NamedFields<
           "name"
         >
       >;
-    }
+    } & { Field: TypedField<S, D> }
   : never;
 
 type TypedFieldProps<
