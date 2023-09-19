@@ -100,16 +100,19 @@ type TypedFieldProps<
       ? S["properties"][FN] extends {
           items: infer IS;
         }
-        ? SmartFieldChildren<
+        ? // Array field
+          SmartFieldChildren<
             IS extends JSONSchemaObject ? IS : never,
             NonNullable<D[FN]> extends Array<infer I> ? I : D[FN]
           >
         : React.FC<
             S["properties"][FN] extends { type: "object" }
-              ? NamedFields<S["properties"][FN], D[FN]> &
+              ? // Object field
+                NamedFields<S["properties"][FN], D[FN]> &
                   ObjectFieldTemplateProps<D[FN]> &
                   ExpandedDataProps<S["properties"][FN], D[FN]>
-              : NamedDataProps<
+              : // Scalar field
+                NamedDataProps<
                   // pending react-jsonschema-form#3873
                   Omit<FieldTemplateProps<D[FN]>, "onChange"> & {
                     onChange: FieldProps<D[FN]>["onChange"];
