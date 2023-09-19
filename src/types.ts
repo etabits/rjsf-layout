@@ -67,22 +67,25 @@ type NamedDataProps<
       }
     : {});
 
-type ExpandedFields<S extends JSONSchemaObject, D extends BasicDataObject> = {
-  [FN in Capitalize<
-    keyof S["properties"] extends string ? keyof S["properties"] : never
-  >]: React.FC<
-    Omit<
-      TypedFieldProps<
-        S,
-        D,
-        Uncapitalize<FN> extends keyof S["properties"]
-          ? Uncapitalize<FN>
-          : never
-      >,
-      "name"
-    >
-  >;
-};
+type ExpandedFields<
+  S extends JSONSchemaObject,
+  D extends BasicDataObject
+> = keyof S["properties"] extends string
+  ? {
+      [FN in Capitalize<keyof S["properties"]>]: React.FC<
+        Omit<
+          TypedFieldProps<
+            S,
+            D,
+            Uncapitalize<FN> extends keyof S["properties"]
+              ? Uncapitalize<FN>
+              : never
+          >,
+          "name"
+        >
+      >;
+    }
+  : never;
 
 type TypedFieldProps<
   S extends JSONSchemaObject,
@@ -92,21 +95,21 @@ type TypedFieldProps<
   label?: string;
   name: FN;
   children?: D extends Record<any, any> // We should have nested data here!
-    ? S["properties"][FN] extends {
-        items: infer IS;
-      }
-      ? SmartFieldChildren<
-          IS extends JSONSchemaObject ? IS : never,
-          NonNullable<D[FN]> extends Array<infer I> ? I : D[FN]
-        >
-      : React.FC<
-          S["properties"][FN] extends { type: "object" }
-            ? ExpandedFields<S["properties"][FN], D[FN]> &
-                ObjectFieldTemplateProps<D[FN]>
-            : FN extends string
-            ? NamedDataProps<FieldTemplateProps<D[FN]>, FN>
-            : never
-        >
+    ? FN extends string
+      ? S["properties"][FN] extends {
+          items: infer IS;
+        }
+        ? SmartFieldChildren<
+            IS extends JSONSchemaObject ? IS : never,
+            NonNullable<D[FN]> extends Array<infer I> ? I : D[FN]
+          >
+        : React.FC<
+            S["properties"][FN] extends { type: "object" }
+              ? ExpandedFields<S["properties"][FN], D[FN]> &
+                  ObjectFieldTemplateProps<D[FN]>
+              : NamedDataProps<FieldTemplateProps<D[FN]>, FN>
+          >
+      : never
     : never;
 };
 
