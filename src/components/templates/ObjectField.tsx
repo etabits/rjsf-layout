@@ -22,6 +22,12 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
           ...props,
           ...Object.fromEntries(
             props.properties.map(({ name }) => [
+              `$${name}`,
+              props.formData?.[name],
+            ])
+          ),
+          ...Object.fromEntries(
+            props.properties.map(({ name }) => [
               name[0].toUpperCase() + name.substring(1),
               (props: Record<string, any>) =>
                 React.createElement(Field, {

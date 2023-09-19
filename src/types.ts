@@ -39,8 +39,22 @@ export type SmartFieldChildren<
       ObjectFieldTemplateProps<D> & {
         // Because array item data becomes undefined-able otherwise
         formData: Partial<D>;
-      } & ExpandedFields<S, D>
+      } & ExpandedFields<S, D> &
+        ExpandedDataProps<S, D>
     >;
+
+type ExpandedDataProps<
+  S extends JSONSchemaObject,
+  D extends BasicDataObject
+> = keyof S["properties"] extends string
+  ? D extends Record<any, any>
+    ? {
+        [$FN in `$${keyof S["properties"]}`]: $FN extends `$${infer FN}`
+          ? D[FN]
+          : never;
+      }
+    : never
+  : never;
 
 type NamedDataProps<
   Props extends { formData?: unknown; onChange?: unknown },
