@@ -4,7 +4,8 @@ import type { TypedField } from "../types";
 import FieldsContext from "../contexts/Fields";
 import LayoutContext from "../contexts/Layout";
 
-const Field: TypedField<{}> = ({ name, children, label }) => {
+// CHKME should make the default untyped field more permissive
+const Field: TypedField<{}, {}> = ({ name, children, label }) => {
   const fields = useContext(FieldsContext);
   const Field = fields?.find((props) => props.name === name)?.content;
 

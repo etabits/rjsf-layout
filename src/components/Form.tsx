@@ -5,12 +5,12 @@ import LayoutContext from "../contexts/Layout";
 import FieldTemplate from "./templates/Field";
 import ObjectFieldTemplate from "./templates/ObjectField";
 
-const Form = <T extends JSONSchemaObject>({
+const Form = <S extends JSONSchemaObject>({
   children,
   submitter,
   theme,
   ...props
-}: LayoutFormProps<T>) => {
+}: LayoutFormProps<S>) => {
   const rjsfProps = props as FormProps;
   const RJSFForm = theme ? withTheme(theme) : DefaultForm;
 

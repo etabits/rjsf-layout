@@ -15,50 +15,66 @@ type BasicReactNode =
 
 export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
 
-export type SmartFieldChildren<T extends JSONSchemaObject> =
-  | BasicReactNode
-  | ((helpers: {
-      Field: TypedField<T>;
-      formData: FromSchema<T>;
-    }) => BasicReactNode);
+/*
+  Generics naming conventions:
+  S  Schema
+  D  Data
+  FN Field Name
+*/
+
+export type SmartFieldChildren<
+  S extends JSONSchemaObject,
+  D extends BasicDataObject
+> = BasicReactNode | React.FC<{ Field: TypedField<S, D>; formData: D }>;
 
 type TypedFieldProps<
-  SCH extends JSONSchemaObject,
-  FN extends keyof SCH["properties"]
+  S extends JSONSchemaObject,
+  D extends BasicDataObject,
+  FN extends keyof S["properties"]
 > = {
   label?: string;
   name: FN;
   children?: SmartFieldChildren<
-    SCH["properties"][FN] extends {
-      items: any;
+    S["properties"][FN] extends {
+      items: infer U;
     }
-      ? SCH["properties"][FN]["items"]
+      ? U extends JSONSchemaObject
+        ? U
+        : never
+      : never,
+    D extends Record<any, any>
+      ? NonNullable<D[FN]> extends Array<infer Item>
+        ? Item
+        : never
       : never
   >;
 };
 
-export type TypedField<SCH extends JSONSchemaObject> = <
-  FN extends keyof SCH["properties"]
->(
-  props: TypedFieldProps<SCH, FN>
+export type TypedField<
+  S extends JSONSchemaObject,
+  D extends BasicDataObject
+> = <FN extends keyof S["properties"]>(
+  props: TypedFieldProps<S, D, FN>
 ) => React.ReactElement;
 
-type OnAction<T extends JSONSchemaObject, C extends "onSubmit" | "onChange"> = (
+type BasicDataObject = unknown;
+
+type OnAction<D extends BasicDataObject, C extends "onSubmit" | "onChange"> = (
   data: Omit<Parameters<NonNullable<FormProps[C]>>[0], "formData"> & {
-    formData?: FromSchema<T>;
+    formData?: D;
   },
   etc: Parameters<NonNullable<FormProps[C]>>[1]
 ) => void;
 
-export type LayoutFormProps<T extends JSONSchemaObject> = Omit<
-  FormProps,
-  "children" | "onSubmit" | "onChange" | "formData"
-> & {
-  schema: T;
-  children?: SmartFieldChildren<T>;
+export type LayoutFormProps<
+  S extends JSONSchemaObject,
+  D = FromSchema<S> // We do this once at this top level, and pass it on
+> = Omit<FormProps, "children" | "onSubmit" | "onChange" | "formData"> & {
+  schema: S;
+  children?: SmartFieldChildren<S, D>;
   submitter?: ReactNode;
   theme?: ThemeProps;
-  formData?: FromSchema<T>;
-  onSubmit?: OnAction<T, "onSubmit">;
-  onChange?: OnAction<T, "onChange">;
+  formData?: D;
+  onSubmit?: OnAction<D, "onSubmit">;
+  onChange?: OnAction<D, "onChange">;
 };
