@@ -1,5 +1,6 @@
 import type { FormProps, ThemeProps } from "@rjsf/core";
 import type {
+  FieldProps,
   FieldTemplateProps,
   ObjectFieldTemplateProps,
   TemplatesType,
@@ -107,7 +108,13 @@ type TypedFieldProps<
             S["properties"][FN] extends { type: "object" }
               ? ExpandedFields<S["properties"][FN], D[FN]> &
                   ObjectFieldTemplateProps<D[FN]>
-              : NamedDataProps<FieldTemplateProps<D[FN]>, FN>
+              : NamedDataProps<
+                  // pending react-jsonschema-form#3873
+                  Omit<FieldTemplateProps<D[FN]>, "onChange"> & {
+                    onChange: FieldProps<D[FN]>["onChange"];
+                  },
+                  FN
+                >
           >
       : never
     : never;
