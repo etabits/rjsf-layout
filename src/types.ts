@@ -40,7 +40,7 @@ export type SmartFieldChildren<
       ObjectFieldTemplateProps<D> & {
         // Because array item data becomes undefined-able otherwise
         formData: Partial<D>;
-      } & ExpandedFields<S, D> &
+      } & NamedFields<S, D> &
         ExpandedDataProps<S, D>
     >;
 
@@ -68,7 +68,7 @@ type NamedDataProps<
       }
     : {});
 
-type ExpandedFields<
+type NamedFields<
   S extends JSONSchemaObject,
   D extends BasicDataObject
 > = keyof S["properties"] extends string
@@ -106,7 +106,7 @@ type TypedFieldProps<
           >
         : React.FC<
             S["properties"][FN] extends { type: "object" }
-              ? ExpandedFields<S["properties"][FN], D[FN]> &
+              ? NamedFields<S["properties"][FN], D[FN]> &
                   ObjectFieldTemplateProps<D[FN]> &
                   ExpandedDataProps<S["properties"][FN], D[FN]>
               : NamedDataProps<
