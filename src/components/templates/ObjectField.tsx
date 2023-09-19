@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useMemo } from "react";
 import { TemplatesType } from "@rjsf/utils";
 import { getDefaultRegistry } from "@rjsf/core";
 
@@ -16,6 +16,23 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
   const RegObjectFieldTemplate =
     theme?.templates?.["ObjectFieldTemplate"] || DefaultObjectFieldTemplate;
 
+  // If we don't memoize this, these new named fields get re-rendered!
+  const namedFields = useMemo(
+    () =>
+      Object.fromEntries(
+        props.properties.map(({ name }) => [
+          name[0].toUpperCase() + name.substring(1),
+          (props: Record<string, any>) =>
+            React.createElement(Field, {
+              // @ts-ignore it is, arguably, never never!
+              name,
+              ...props,
+            }),
+        ])
+      ),
+    []
+  );
+
   const expandedLayout =
     typeof layout === "function"
       ? layout({
@@ -26,17 +43,7 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
               props.formData?.[name],
             ])
           ),
-          ...Object.fromEntries(
-            props.properties.map(({ name }) => [
-              name[0].toUpperCase() + name.substring(1),
-              (props: Record<string, any>) =>
-                React.createElement(Field, {
-                  // @ts-ignore it is, arguably, never never!
-                  name,
-                  ...props,
-                }),
-            ])
-          ),
+          ...namedFields,
         })
       : layout;
 
