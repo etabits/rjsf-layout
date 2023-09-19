@@ -6,6 +6,7 @@ import type {
 } from "@rjsf/utils";
 import type { ReactNode } from "react";
 import type { FromSchema as FromSchema_, JSONSchema } from "json-schema-to-ts";
+import React from "react";
 
 export type FromSchema<T extends JSONSchemaObject> = FromSchema_<
   T & { additionalProperties: false }
@@ -34,11 +35,28 @@ export type SmartFieldChildren<
 > =
   | BasicReactNode
   | React.FC<
-      { Field: TypedField<S, D> } & ObjectFieldTemplateProps<D> & {
-          // Because array item data becomes undefined-able otherwise
-          formData: Partial<D>;
-        }
+      ObjectFieldTemplateProps<D> & {
+        // Because array item data becomes undefined-able otherwise
+        formData: Partial<D>;
+      } & ExpandedFields<S, D>
     >;
+
+type ExpandedFields<S extends JSONSchemaObject, D extends BasicDataObject> = {
+  [FN in Capitalize<
+    keyof S["properties"] extends string ? keyof S["properties"] : never
+  >]: React.FC<
+    Omit<
+      TypedFieldProps<
+        S,
+        D,
+        Uncapitalize<FN> extends keyof S["properties"]
+          ? Uncapitalize<FN>
+          : never
+      >,
+      "name"
+    >
+  >;
+};
 
 type TypedFieldProps<
   S extends JSONSchemaObject,
@@ -57,9 +75,8 @@ type TypedFieldProps<
         >
       : React.FC<
           S["properties"][FN] extends { type: "object" }
-            ? {
-                Field: TypedField<S["properties"][FN], D[FN]>;
-              } & ObjectFieldTemplateProps<D[FN]>
+            ? ExpandedFields<S["properties"][FN], D[FN]> &
+                ObjectFieldTemplateProps<D[FN]>
             : FieldProps<D[FN]>
         >
     : never;

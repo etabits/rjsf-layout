@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { TemplatesType } from "@rjsf/utils";
 import { getDefaultRegistry } from "@rjsf/core";
 
@@ -20,7 +20,17 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
     typeof layout === "function"
       ? layout({
           ...props,
-          Field,
+          ...Object.fromEntries(
+            props.properties.map(({ name }) => [
+              name[0].toUpperCase() + name.substring(1),
+              (props: Record<string, any>) =>
+                React.createElement(Field, {
+                  // @ts-ignore it is, arguably, never never!
+                  name,
+                  ...props,
+                }),
+            ])
+          ),
         })
       : layout;
 
