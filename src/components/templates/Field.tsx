@@ -24,10 +24,17 @@ const FieldTemplate: TemplatesType["FieldTemplate"] = (props) => {
     typeof layout === "function" &&
     !["array", "object"].includes(props.schema.type as string)
   ) {
+    const { formData, onChange, ...otherProps } = props;
+    const fieldName = otherProps.id.split("_").pop() || "data";
     return (
       <>
         {DisplayLayout({
-          layout: layout(props),
+          layout: layout({
+            ["$" + fieldName]: formData,
+            ["set" + fieldName[0].toUpperCase() + fieldName.substring(1)]:
+              onChange,
+            ...otherProps,
+          }),
         })}
       </>
     );

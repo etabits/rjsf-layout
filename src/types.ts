@@ -1,6 +1,6 @@
 import type { FormProps, ThemeProps } from "@rjsf/core";
 import type {
-  FieldProps,
+  FieldTemplateProps,
   ObjectFieldTemplateProps,
   TemplatesType,
 } from "@rjsf/utils";
@@ -27,6 +27,7 @@ export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
   FN Field Name
   I  Item
   IS ItemsSchema
+  SD SetData
 */
 
 export type SmartFieldChildren<
@@ -40,6 +41,17 @@ export type SmartFieldChildren<
         formData: Partial<D>;
       } & ExpandedFields<S, D>
     >;
+
+type NamedDataProps<
+  Props extends { formData?: unknown; onChange?: unknown },
+  FN extends string
+> = Omit<Props, "formData" | "onChange"> & {
+  [FN_ in `$${FN}`]: Props["formData"];
+} & (Props["onChange"] extends Function
+    ? {
+        [SD in `set${Capitalize<FN>}`]: Props["onChange"];
+      }
+    : {});
 
 type ExpandedFields<S extends JSONSchemaObject, D extends BasicDataObject> = {
   [FN in Capitalize<
@@ -77,7 +89,9 @@ type TypedFieldProps<
           S["properties"][FN] extends { type: "object" }
             ? ExpandedFields<S["properties"][FN], D[FN]> &
                 ObjectFieldTemplateProps<D[FN]>
-            : FieldProps<D[FN]>
+            : FN extends string
+            ? NamedDataProps<FieldTemplateProps<D[FN]>, FN>
+            : never
         >
     : never;
 };
