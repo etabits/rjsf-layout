@@ -107,7 +107,8 @@ type TypedFieldProps<
         : React.FC<
             S["properties"][FN] extends { type: "object" }
               ? ExpandedFields<S["properties"][FN], D[FN]> &
-                  ObjectFieldTemplateProps<D[FN]>
+                  ObjectFieldTemplateProps<D[FN]> &
+                  ExpandedDataProps<S["properties"][FN], D[FN]>
               : NamedDataProps<
                   // pending react-jsonschema-form#3873
                   Omit<FieldTemplateProps<D[FN]>, "onChange"> & {
