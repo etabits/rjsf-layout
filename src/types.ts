@@ -37,7 +37,7 @@ export type SmartFieldChildren<
 > =
   | BasicReactNode
   | React.FC<
-      ObjectFieldTemplateProps<D> & {
+      Omit<ObjectFieldTemplateProps<D>, "formData"> & {
         // Because array item data becomes undefined-able otherwise
         formData: Partial<D>;
       } & NamedFields<S, D> &
@@ -50,7 +50,7 @@ type ExpandedDataProps<
 > = keyof S["properties"] extends string
   ? D extends Record<any, any>
     ? {
-        [$FN in `$${keyof S["properties"]}`]: $FN extends `$${infer FN}`
+        [$FN in `$${keyof S["properties"]}`]?: $FN extends `$${infer FN}`
           ? D[FN]
           : never;
       }
@@ -143,7 +143,10 @@ type OnAction<D extends BasicDataObject, C extends "onSubmit" | "onChange"> = (
 export type LayoutFormProps<
   S extends JSONSchemaObject,
   D = FromSchema<S> // We do this once at this top level, and pass it on
-> = Omit<FormProps, "children" | "onSubmit" | "onChange" | "formData"> & {
+> = Omit<
+  FormProps,
+  "schema" | "children" | "onSubmit" | "onChange" | "formData"
+> & {
   schema: S;
   children?: SmartFieldChildren<S, D>;
   submitter?: ReactNode;

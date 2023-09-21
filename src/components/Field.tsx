@@ -1,11 +1,15 @@
-import { useContext } from "react";
+import { ReactNode, useContext } from "react";
 
-import type { TypedField } from "../types";
 import FieldsContext from "../contexts/Fields";
 import LayoutContext from "../contexts/Layout";
 
-// CHKME should make the default untyped field more permissive
-const Field: TypedField<{}, {}> = ({ name, children, label }) => {
+const Field: React.FC<{
+  name: string;
+  label?: string;
+  // While it technically accepts component children (as TypedField),
+  // it is meaningless unless you are using the typed version
+  children?: ReactNode;
+}> = ({ name, children, label }) => {
   const fields = useContext(FieldsContext);
   const Field = fields?.find((props) => props.name === name)?.content;
 
