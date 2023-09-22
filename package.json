@@ -1,11 +1,12 @@
 {
   "name": "rjsf-layout",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "",
   "module": "./lib/index.js",
   "main": "./dist/index.js",
   "types": "./lib/index.d.ts",
   "files": [
+    "README.md",
     "/lib",
     "/dist"
   ],
@@ -38,5 +39,6 @@
   },
   "dependencies": {
     "json-schema-to-ts": "^2.9.2"
-  }
+  },
+  "license": "Apache-2.0"
 }
