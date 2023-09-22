@@ -14,6 +14,7 @@ const Field: React.FC<{
   const Field = fields?.find((props) => props.name === name)?.content;
 
   if (!Field) {
+    // CHKME should we provide error boundaries at array/object levels?
     throw new Error(
       `RJSFLayout: No such field: "${name}". Available fields: ${fields
         ?.map((f) => f.name)

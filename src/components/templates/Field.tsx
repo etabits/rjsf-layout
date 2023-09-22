@@ -24,9 +24,12 @@ const FieldTemplate: TemplatesType["FieldTemplate"] = (props) => {
     typeof layout === "function" &&
     !["array", "object"].includes(props.schema.type as string)
   ) {
+    // Handle leaves, i.e. scalar fields. These can provide custom fields as implementation,
+    // They only get one variable and one setter for that variable
     const { formData, onChange, id } = props;
     const fieldName = id.split("_").pop() || "data";
     return (
+      // CHKME removing the wrapping produces an error
       <>
         {DisplayLayout({
           layout: layout({

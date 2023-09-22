@@ -15,6 +15,7 @@ const Form = <S extends JSONSchemaObject>({
   const RJSFForm = theme ? withTheme(theme) : DefaultForm;
 
   if (!children) {
+    // FIXME need to apply theme stuff here!
     return <RJSFForm {...rjsfProps}>{submitter}</RJSFForm>;
   }
 
@@ -28,7 +29,6 @@ const Form = <S extends JSONSchemaObject>({
       <RJSFForm
         {...{
           ...rjsfProps,
-
           templates: {
             ...theme?.templates,
             FieldTemplate,

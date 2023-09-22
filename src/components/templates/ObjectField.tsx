@@ -44,6 +44,7 @@ const ObjectFieldTemplate: TemplatesType["ObjectFieldTemplate"] = (props) => {
             ])
           ),
           ...namedFields,
+          // The generic, typed, field. Useful for programmatic access
           Field,
         })
       : layout;
