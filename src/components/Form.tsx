@@ -1,8 +1,4 @@
-import DefaultForm, {
-  type FormProps,
-  withTheme,
-  type ThemeProps,
-} from "@rjsf/core";
+import DefaultForm, { type FormProps, withTheme } from "@rjsf/core";
 
 import type { JSONSchemaObject, LayoutFormProps } from "../types";
 import LayoutContext from "../contexts/Layout";

@@ -34,15 +34,21 @@ export type FieldChildren = BasicReactNode | TemplatesType["FieldTemplate"];
 export type SmartFieldChildren<
   S extends JSONSchemaObject,
   D extends BasicDataObject
-> =
-  | BasicReactNode
-  | React.FC<
-      Omit<ObjectFieldTemplateProps<D>, "formData"> & {
-        // Because array item data becomes undefined-able otherwise
-        formData: Partial<D>;
-      } & NamedFields<S, D> &
-        ExpandedDataProps<S, D>
-    >;
+> = BasicReactNode | SmartField<S, D>;
+
+export type SmartField<
+  S extends JSONSchemaObject,
+  D extends BasicDataObject = FromSchema<S>
+> = React.FC<SmartFieldProps<S, D>>;
+
+export type SmartFieldProps<
+  S extends JSONSchemaObject,
+  D extends BasicDataObject
+> = Omit<ObjectFieldTemplateProps<D>, "formData"> & {
+  // Because array item data becomes undefined-able otherwise
+  formData: Partial<D>;
+} & NamedFields<S, D> &
+  ExpandedDataProps<S, D>;
 
 type ExpandedDataProps<
   S extends JSONSchemaObject,
@@ -73,20 +79,24 @@ type NamedFields<
   D extends BasicDataObject
 > = keyof S["properties"] extends string
   ? {
-      [FN in Capitalize<keyof S["properties"]>]: React.FC<
-        Omit<
-          TypedFieldProps<
-            S,
-            D,
-            Uncapitalize<FN> extends keyof S["properties"]
-              ? Uncapitalize<FN>
-              : never
-          >,
-          "name"
-        >
-      >;
+      [FN in Capitalize<keyof S["properties"]>]: NamedField<S, FN, D>;
     } & { Field: TypedField<S, D> }
-  : never;
+  : {};
+
+export type NamedField<
+  S extends JSONSchemaObject,
+  FN extends Capitalize<keyof S["properties"] & string>,
+  D extends BasicDataObject = FromSchema<S>
+> = React.FC<
+  Omit<
+    TypedFieldProps<
+      S,
+      D,
+      Uncapitalize<FN> extends keyof S["properties"] ? Uncapitalize<FN> : never
+    >,
+    "name"
+  >
+>;
 
 type TypedFieldProps<
   S extends JSONSchemaObject,
