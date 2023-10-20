@@ -4,11 +4,13 @@ import type { JSONSchemaObject, LayoutFormProps } from "../types";
 import LayoutContext from "../contexts/Layout";
 import FieldTemplate from "./templates/Field";
 import ObjectFieldTemplate from "./templates/ObjectField";
+import ArrayFieldTemplate from "./templates/ArrayField";
 import { useMemo } from "react";
 
 const rjsfLayoutTemplates = {
   FieldTemplate,
   ObjectFieldTemplate,
+  ArrayFieldTemplate,
 };
 
 const Form = <S extends JSONSchemaObject>({

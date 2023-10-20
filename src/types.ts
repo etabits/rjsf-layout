@@ -1,11 +1,12 @@
 import type { FormProps, ThemeProps } from "@rjsf/core";
 import type {
+  ArrayFieldTemplateProps,
   FieldProps,
   FieldTemplateProps,
   ObjectFieldTemplateProps,
   TemplatesType,
 } from "@rjsf/utils";
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 import type { FromSchema as FromSchema_, JSONSchema } from "json-schema-to-ts";
 import React from "react";
 
@@ -98,18 +99,31 @@ export type NamedField<
   >
 >;
 
+export type ArrayTemplateOverride<D extends unknown[]> = ComponentType<
+  ArrayFieldTemplateProps<D> & {
+    // Added in templates/ArrayField
+    onChange: FieldProps<D>["onChange"];
+  }
+>;
+
 type TypedFieldProps<
   S extends JSONSchemaObject,
   D extends BasicDataObject,
-  FN extends keyof S["properties"]
+  FN extends keyof S["properties"],
+  IS = S["properties"][FN] extends {
+    items: infer IS_;
+  }
+    ? IS_
+    : never,
+  AT = IS extends JSONSchemaObject
+    ? ArrayTemplateOverride<FromSchema<IS>[]>
+    : never
 > = {
   label?: string;
   name: FN;
   children?: D extends Record<any, any> // We should have nested data here!
     ? FN extends string
-      ? S["properties"][FN] extends {
-          items: infer IS;
-        }
+      ? IS extends Record<any, any>
         ? // Array field
           SmartFieldChildren<
             IS extends JSONSchemaObject ? IS : never,
@@ -132,7 +146,11 @@ type TypedFieldProps<
           >
       : never
     : never;
-};
+} & ([IS] extends [{ type: "object" }]
+  ? {
+      ArrayTemplate?: AT;
+    }
+  : {});
 
 export type TypedField<
   S extends JSONSchemaObject,
