@@ -123,7 +123,9 @@ type TypedFieldProps<
   name: FN;
   children?: D extends Record<any, any> // We should have nested data here!
     ? FN extends string
-      ? IS extends Record<any, any>
+      ? S["properties"][FN] extends {
+          items: infer IS;
+        }
         ? // Array field
           SmartFieldChildren<
             IS extends JSONSchemaObject ? IS : never,
