@@ -2,8 +2,6 @@
 
 Reclaim full layout control. Want to dive fast? Check this [complete example here](https://github.com/aularon/rjsf-layout-example-nextjs).
 
-![Preview Animation](https://github.com/etabits/rjsf-layout/blob/assets/animation.gif?raw=true)
-
 ## Installation
 
 ```sh
