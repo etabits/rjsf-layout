@@ -12,7 +12,8 @@ import React from "react";
 
 export type FromSchema<T extends JSONSchemaObject> = FromSchema_<
   T & { additionalProperties: false }
->;
+> &
+  Record<string, unknown>;
 export type JSONSchemaObject = Exclude<JSONSchema, boolean>;
 
 type BasicReactNode =
