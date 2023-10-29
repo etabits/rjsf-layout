@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { TemplatesType } from "@rjsf/utils";
+import type { TemplatesType } from "@rjsf/utils";
 import { getDefaultRegistry } from "@rjsf/core";
 
 import LayoutContext from "../../contexts/Layout";
@@ -11,21 +11,20 @@ const DefaultArrayFieldTemplate =
 const ArrayFieldTemplate: TemplatesType["ArrayFieldTemplate"] = (props) => {
   const { ArrayTemplate, theme } = useContext(LayoutContext);
 
-  // FIXME upstream Field should pass enhancing props in layout context
-  // with overridden label probably
-  const enhancedProps = ArrayTemplate
-    ? {
-        ...props,
-        onChange: useContext(PropsContext)?.onChange,
-      }
-    : props;
+  if (ArrayTemplate) {
+    const AT = ArrayTemplate as typeof DefaultArrayFieldTemplate;
+
+    // FIXME upstream Field should pass enhancing props in layout context
+    // with overridden label probably
+    const onChange = useContext(PropsContext)?.onChange;
+
+    return <AT {...{ ...props, onChange }} />;
+  }
 
   const RegArrayFieldTemplate =
-    ArrayTemplate ||
-    theme?.templates?.["ArrayFieldTemplate"] ||
-    DefaultArrayFieldTemplate;
+    theme?.templates?.["ArrayFieldTemplate"] || DefaultArrayFieldTemplate;
 
-  return <RegArrayFieldTemplate {...enhancedProps} />;
+  return <RegArrayFieldTemplate {...props} />;
 };
 
 export default ArrayFieldTemplate;
