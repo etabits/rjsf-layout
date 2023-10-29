@@ -8,6 +8,7 @@ export type {
   FromSchema,
   JSONSchemaObject,
   LayoutFormProps,
-  SmartField,
+  TypedField,
   NamedField,
+  ArrayTemplateOverride,
 } from "./types";
