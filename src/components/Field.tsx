@@ -20,7 +20,9 @@ const Field: React.FC<{
     throw new Error(
       `RJSFLayout: No such field: "${name}". Available fields: ${fields
         ?.map((f) => f.name)
-        .join(", ")}`
+        .join(
+          ", "
+        )}. If field exists on model, please add it to the select tree. Alternatively, if you are trying to invoke the field inside a field other than its direct parent, move it out!`
     );
   }
 
