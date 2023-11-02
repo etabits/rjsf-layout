@@ -9,6 +9,8 @@ export type {
   JSONSchemaObject,
   LayoutFormProps,
   TypedField,
+  TypedFieldProps,
   NamedField,
+  NamedFieldProps,
   ArrayTemplateOverride,
 } from "./types";

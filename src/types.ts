@@ -45,7 +45,7 @@ export type TypedField<
 
 export type TypedFieldProps<
   S extends JSONSchemaObject,
-  D extends BasicDataObject
+  D extends BasicDataObject = FromSchema<S>
 > = Omit<ObjectFieldTemplateProps<D>, "formData"> & {
   // Because array item data becomes undefined-able otherwise
   formData: Partial<D>;
@@ -90,15 +90,19 @@ export type NamedField<
   S extends JSONSchemaObject,
   FN extends Capitalize<keyof S["properties"] & string>,
   D extends BasicDataObject = FromSchema<S>
-> = React.FC<
-  Omit<
-    BasicTypedFieldProps<
-      S,
-      D,
-      Uncapitalize<FN> extends keyof S["properties"] ? Uncapitalize<FN> : never
-    >,
-    "name"
-  >
+> = React.FC<NamedFieldProps<S, FN, D>>;
+
+export type NamedFieldProps<
+  S extends JSONSchemaObject,
+  FN extends Capitalize<keyof S["properties"] & string>,
+  D extends BasicDataObject = FromSchema<S>
+> = Omit<
+  BasicTypedFieldProps<
+    S,
+    D,
+    Uncapitalize<FN> extends keyof S["properties"] ? Uncapitalize<FN> : never
+  >,
+  "name"
 >;
 
 export type ArrayTemplateOverride<D extends unknown[]> = ComponentType<
