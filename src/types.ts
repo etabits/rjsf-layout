@@ -49,6 +49,7 @@ export type TypedFieldProps<
 > = Omit<ObjectFieldTemplateProps<D>, "formData"> & {
   // Because array item data becomes undefined-able otherwise
   formData: Partial<D>;
+  onChange: FieldProps<D>["onChange"];
 } & NamedFields<S, D> &
   ExpandedDataProps<S, D>;
 
