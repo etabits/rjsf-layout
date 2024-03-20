@@ -8,7 +8,7 @@ const Field: React.FC<GenericBasicTypedFieldProps> = ({
   name,
   children,
   label,
-  ArrayTemplate,
+  ArrayTemplate: AT,
   dontMemoize,
 }) => {
   const fields = useContext(FieldsContext);
@@ -29,6 +29,7 @@ const Field: React.FC<GenericBasicTypedFieldProps> = ({
   dontMemoize ??= inheritedLayoutProps.dontMemoize; // inherit if undefined
 
   const layout = useMemo(() => children, dontMemoize ? [children] : [-1]);
+  const ArrayTemplate = useMemo(() => AT, dontMemoize ? [AT] : [-1]);
   const layoutContext = useMemo(
     () => ({
       ...inheritedLayoutProps,
