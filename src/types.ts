@@ -158,7 +158,8 @@ export type BasicTypedFieldProps<
   ? {
       ArrayTemplate?: AT;
     }
-  : {});
+  : {}) &
+  MemoizationOptions;
 
 export type GenericBasicTypedFieldProps = BasicTypedFieldProps<
   {
@@ -205,4 +206,8 @@ export type LayoutFormProps<
   formData?: D;
   onSubmit?: OnAction<D, "onSubmit">;
   onChange?: OnAction<D, "onChange">;
+} & MemoizationOptions;
+
+export type MemoizationOptions = {
+  dontMemoize?: boolean;
 };

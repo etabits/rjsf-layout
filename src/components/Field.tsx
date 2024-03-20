@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useMemo } from "react";
 
 import FieldsContext from "../contexts/Fields";
 import LayoutContext from "../contexts/Layout";
@@ -9,6 +9,7 @@ const Field: React.FC<GenericBasicTypedFieldProps> = ({
   children,
   label,
   ArrayTemplate,
+  dontMemoize,
 }) => {
   const fields = useContext(FieldsContext);
   const Field = fields?.find((props) => props.name === name)?.content;
@@ -25,18 +26,25 @@ const Field: React.FC<GenericBasicTypedFieldProps> = ({
   }
 
   const inheritedLayoutProps = useContext(LayoutContext);
+  dontMemoize ??= inheritedLayoutProps.dontMemoize; // inherit if undefined
+
+  const layout = useMemo(() => children, dontMemoize ? [children] : [-1]);
+  const layoutContext = useMemo(
+    () => ({
+      ...inheritedLayoutProps,
+      dontMemoize,
+      layout,
+      overrides: {
+        label,
+      },
+      ArrayTemplate,
+    }),
+    /// XXX should we add label? or should we deprecate label?!
+    [inheritedLayoutProps, dontMemoize, layout, ArrayTemplate]
+  );
 
   return (
-    <LayoutContext.Provider
-      value={{
-        ...inheritedLayoutProps,
-        layout: children,
-        overrides: {
-          label,
-        },
-        ArrayTemplate,
-      }}
-    >
+    <LayoutContext.Provider value={layoutContext}>
       {Field}
     </LayoutContext.Provider>
   );

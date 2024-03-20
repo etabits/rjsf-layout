@@ -17,6 +17,7 @@ const Form = <S extends JSONSchemaObject>({
   children,
   submitter,
   theme: theme_,
+  dontMemoize,
   ...props
 }: LayoutFormProps<S>) => {
   const rjsfProps = props as FormProps;
@@ -55,13 +56,18 @@ const Form = <S extends JSONSchemaObject>({
     return <RJSFForm {...rjsfProps}>{submitter}</RJSFForm>;
   }
 
+  const layout = useMemo(() => children, dontMemoize ? [children] : [-1]);
+  const layoutContext = useMemo(
+    () => ({
+      layout,
+      theme,
+      dontMemoize,
+    }),
+    [layout, theme, dontMemoize]
+  );
+
   return (
-    <LayoutContext.Provider
-      value={{
-        layout: children,
-        theme,
-      }}
-    >
+    <LayoutContext.Provider value={layoutContext}>
       <RJSFForm
         {...{
           ...rjsfProps,
