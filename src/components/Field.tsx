@@ -1,17 +1,15 @@
-import { ReactNode, useContext } from "react";
+import { useContext } from "react";
 
 import FieldsContext from "../contexts/Fields";
 import LayoutContext from "../contexts/Layout";
-import { ArrayTemplateOverride } from "../types";
+import type { GenericBasicTypedFieldProps } from "../types";
 
-const Field: React.FC<{
-  name: string;
-  label?: string;
-  // While it technically accepts component children (as TypedField),
-  // it is meaningless unless you are using the typed version
-  children?: ReactNode;
-  ArrayTemplate?: ArrayTemplateOverride<[]>;
-}> = ({ name, children, label, ArrayTemplate }) => {
+const Field: React.FC<GenericBasicTypedFieldProps> = ({
+  name,
+  children,
+  label,
+  ArrayTemplate,
+}) => {
   const fields = useContext(FieldsContext);
   const Field = fields?.find((props) => props.name === name)?.content;
 

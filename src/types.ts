@@ -112,7 +112,7 @@ export type ArrayTemplateOverride<D extends unknown[]> = ComponentType<
   }
 >;
 
-type BasicTypedFieldProps<
+export type BasicTypedFieldProps<
   S extends JSONSchemaObject,
   D extends BasicDataObject,
   FN extends keyof S["properties"],
@@ -159,6 +159,21 @@ type BasicTypedFieldProps<
       ArrayTemplate?: AT;
     }
   : {});
+
+export type GenericBasicTypedFieldProps = BasicTypedFieldProps<
+  {
+    properties: {
+      array: {
+        items: {
+          // So that we get the `ArrayTemplate` prop as well!
+          type: "object";
+        };
+      };
+    };
+  },
+  any,
+  "array"
+>;
 
 export type BasicTypedField<
   S extends JSONSchemaObject,
