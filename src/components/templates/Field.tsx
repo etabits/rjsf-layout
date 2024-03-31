@@ -20,9 +20,14 @@ const FieldTemplate: TemplatesType["FieldTemplate"] = (props) => {
     props.schema.title = label;
   }
 
+  // XXX extract into a function that does additional sanity checks
+  const type = Array.isArray(props.schema.type)
+    ? props.schema.type.find((item) => item !== "null")
+    : props.schema.type;
+
   if (
     typeof layout === "function" &&
-    !["array", "object"].includes(props.schema.type as string)
+    !["array", "object"].includes(type as string)
   ) {
     // Handle leaves, i.e. scalar fields. These can provide custom fields as implementation,
     // They only get one variable and one setter for that variable
